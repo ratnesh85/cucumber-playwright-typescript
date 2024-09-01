@@ -1,5 +1,5 @@
 import {Before, After, setDefaultTimeout, BeforeAll, AfterAll, BeforeStep, AfterStep, Status} from "@cucumber/cucumber"
-import {chromium, firefox, webkit} from "playwright"
+import {chromium, firefox, request, webkit} from "playwright"
 import dotenv from 'dotenv';
 dotenv.config()
 setDefaultTimeout(1000 * 60 * 2);
@@ -49,8 +49,9 @@ Before(async function (scenario) {
   });
   global.page = await global.bCtx.newPage();
 
-  global.page.goto(process.env.url);
-  global.page.waitForLoadState();
+  await global.page.goto(process.env.url);
+  await global.page.waitForLoadState();
+  global.req = await request.newContext();;
 
   //this.log("Scenario title: " + scenario.pickle.name); // it will add custom log to html report
 });
